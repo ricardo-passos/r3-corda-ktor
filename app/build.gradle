@@ -1,0 +1,56 @@
+plugins {
+    // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
+    id 'org.jetbrains.kotlin.jvm' version '1.7.10'
+
+    // Apply the application plugin to add support for building a CLI application in Java.
+    id 'application'
+    id 'io.ktor.plugin' version '2.1.0'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.10'
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+
+    // used to download corda-rpc deps
+    maven { url 'https://software.r3.com/artifactory/corda' }
+}
+
+dependencies {
+    // Align versions of all Kotlin components
+    implementation platform('org.jetbrains.kotlin:kotlin-bom')
+
+    // Use the Kotlin JDK 8 standard library.
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:31.0.1-jre'
+
+    // required to run app
+    implementation "io.ktor:ktor-server-core:2.1.0"
+    implementation "io.ktor:ktor-server-netty:2.1.0"
+    implementation "ch.qos.logback:logback-classic:1.2.11"
+
+    implementation "net.corda:corda-rpc:4.9.2"
+    implementation "io.ktor:ktor-jackson:1.6.8"
+    implementation "net.corda:corda-jackson:4.9.2"
+
+    // plugins
+    implementation "io.ktor:ktor-server-content-negotiation:2.1.0"
+    implementation "io.ktor:ktor-serialization-kotlinx-json:2.1.0"
+}
+
+testing {
+    suites {
+        // Configure the built-in test suite
+        test {
+            // Use Kotlin Test test framework
+            useKotlinTest()
+        }
+    }
+}
+
+application {
+    // Define the main class for the application.
+    getMainClass().set('io.ktor.server.netty.EngineMain')
+}
